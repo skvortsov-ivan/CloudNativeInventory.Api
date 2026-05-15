@@ -1,0 +1,1 @@
+# CloudNativeInventory.Api
