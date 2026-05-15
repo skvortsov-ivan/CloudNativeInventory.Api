@@ -1,0 +1,9 @@
+**/bin/
+**/obj/
+**/.vs/
+**/appsettings.Development.json
+.git/
+Dockerfile
+README.md
+**/*.user
+**/*.suo
