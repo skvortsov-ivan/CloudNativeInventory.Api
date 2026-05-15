@@ -56,3 +56,4 @@ app.MapGet("/debug/routes", (EndpointDataSource ds) =>
 });
 
 app.Run();
+
