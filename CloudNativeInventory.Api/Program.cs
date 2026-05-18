@@ -1,12 +1,23 @@
 using CloudNativeInventory.Api.Data;
 using CloudNativeInventory.Api.Models;
 using Microsoft.EntityFrameworkCore;
-// using Azure.Identity; // TODO (Del 4): Krävs för Key Vault
+using Azure.Identity; // TODO (Del 4): Krävs för Key Vault
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi(); // .NET 9 OpenAPI
+
+// 1. Läs in KeyVaultUrl från konfigurationen
+var keyVaultUrl = builder.Configuration["KeyVaultUrl"];
+
+// 2. Om KeyVaultUrl är satt, koppla in Azure Key Vault som config provider
+if (!string.IsNullOrEmpty(keyVaultUrl))
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri(keyVaultUrl),
+        new DefaultAzureCredential());
+}
 
 // TODO (Del 4 i "Tips och förslag"): Konfigurera Azure Key Vault
 // Använd Managed Identity för att hämta hemligheter i produktion.
