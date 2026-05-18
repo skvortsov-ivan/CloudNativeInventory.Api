@@ -41,3 +41,7 @@ When the application runs successfully in a container, the next step is to let t
 
 ## Deployment to Azure
 Azure Container Apps handles the deployment by pulling the exact image produced by the pipeline, allowing the application to run in a fully managed environment without any manual server administration. When the container runs in Azure, the platform provides the application access to other Azure services. Azure Key Vault is one of these services which is used as a storage for the application's secrets, ensuring that no sensitive information is included in the repository and Docker image. 
+
+## ADR
+Every decision regarding the pipeline design, Azure services and secret management can be found inside of the docs/adr folder inside of the respository. Url: 
+https://github.com/skvortsov-ivan/CloudNativeInventory.Api/tree/master/CloudNativeInventory.Api/docs/adr
