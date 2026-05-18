@@ -12,7 +12,7 @@ dotnet run
 ```
 
 With the application running, it becomes possible to check that the API is working by writing the following url into the browser:
-http://localhost:8080/api/inventory/list/products
+http://localhost:8080/api/inventory/system/verify-integration
 
 This serves as a way to confirm that the application behaves as expected before introducing containers or cloud infrastructure.
 
@@ -34,7 +34,7 @@ For convenience, the repository also includes a Docker Compose configuration tha
 ```
 docker compose up -d
 ```
-This command builds the image if necessary and starts the container in the background, again making the API available at http://localhost:8080/api/inventory/list/products.
+This command builds the image if necessary and starts the container in the background, again making the API available at http://localhost:8080/api/inventory/system/verify-integration
 
 ## CI/CD Pipeline
 When the application runs successfully in a container, the next step is to let the CI/CD pipeline handle the same process automatically. The pipeline is triggered whenever changes are pushed to the repository, and its job is to build, test, and package the application without requiring any manual steps. It restores dependencies, compiles the project, runs the test suite, and produces a versioned Docker image based on the same Dockerfile used locally. Once the image has been created, the pipeline pushes it to Azure Container Registry, making it available for deployment.
