@@ -44,7 +44,7 @@ resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-05-01' = {
   }
 }
 
-// RESURS 3: Azure Container Registry (ACR)
+// RESURS 3: Azure Container Registry (ACR) 
 resource acr 'Microsoft.ContainerRegistry/registries@2023-07-01' = {
   name: acrName
   location: location
