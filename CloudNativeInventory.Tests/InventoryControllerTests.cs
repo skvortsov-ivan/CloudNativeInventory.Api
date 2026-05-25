@@ -4,6 +4,7 @@ using CloudNativeInventory.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
@@ -29,7 +30,10 @@ public class InventoryControllerTests
         await context.SaveChangesAsync();
 
         var mockConfig = new Mock<IConfiguration>();
-        var controller = new InventoryController(context, mockConfig.Object);
+        var mockLogger = new Mock<ILogger<InventoryController>>();
+        
+        var controller = new InventoryController(context, mockConfig.Object, mockLogger.Object);
+
 
         // Act
         var actionResult = await controller.GetProducts();
@@ -51,7 +55,8 @@ public class InventoryControllerTests
         mockConfig.Setup(c => c["ExternalServices:VendorApiKey"])
                   .Returns("LOCAL_DEV_SECRET_12345_DO_NOT_DEPLOY");
 
-        var controller = new InventoryController(context, mockConfig.Object);
+        var mockLogger = new Mock<ILogger<InventoryController>>();
+        var controller = new InventoryController(context, mockConfig.Object, mockLogger.Object);
 
         // Act
         var result = controller.VerifyExternalIntegration() as ObjectResult;
