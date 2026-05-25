@@ -1,6 +1,4 @@
-﻿# 0001-decision-container-apps-or-app-service.md
-
-## Architecture Decision Record: Choice of Azure Compute
+﻿## Architecture Decision Record: Choice of Azure Compute
 
 ### Context
 CloudNativeInventory is a student project where we will containerize an ASP NET core WEB API project with the help of Docker.
