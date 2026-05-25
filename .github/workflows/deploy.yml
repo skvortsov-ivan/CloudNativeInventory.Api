@@ -4,7 +4,7 @@ on:
     branches: [ "master" ]
 
 env:
-  AZURE_CONTAINER_REGISTRY: "acrstudentfktbixduj35by.azurecr.io"
+  AZURE_CONTAINER_REGISTRY: "acrstudentfktbixduj35by"
   CONTAINER_APP_NAME: "ca-inventory-api"
   RESOURCE_GROUP: "rg-bicep-student2"
 
