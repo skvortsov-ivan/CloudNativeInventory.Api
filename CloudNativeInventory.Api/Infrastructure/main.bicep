@@ -87,13 +87,19 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
           ]
         }
       }
+      registries: [
+        {
+          server: '${acr.name}.azurecr.io'
+          identity: 'system'
+        }
+      ]
     }
     template: {
       containers: [
         {
           name: 'inventory-api'
           // Vi startar med en tillfällig standard-image. Vår GitHub Actions pipeline kommer byta ut denna senare.
-          image: 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
+          image: '${acr.name}.azurecr.io/${appName}:latest'
           env: [
             {
               // Här får applikationen veta vart den ska skicka sin övervakningsdata
@@ -141,15 +147,44 @@ resource kvSecretsUserRole 'Microsoft.Authorization/roleDefinitions@2022-04-01' 
   name: '4633458b-17de-408a-b874-0445c86b69e6' // Detta är det statiska ID:t för Secrets User över hela Azure.
 }
 
-// VAD: Knyter samman vår Container App med rollen och vårt Key Vault.
-resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+// RBAC: Container App → Key Vault (Secrets User)
+resource kvRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   name: guid(keyVault.id, containerApp.id, kvSecretsUserRole.id)
   scope: keyVault
   properties: {
     roleDefinitionId: kvSecretsUserRole.id
-    principalId: containerApp.identity.principalId // Appens identitet
+    principalId: containerApp.identity.principalId
     principalType: 'ServicePrincipal'
   }
 }
+
+// Ny resurs: RBAC för ACR (AcrPull)
+resource acrPullRoleDef 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+  scope: subscription()
+  // Inbyggda rollen AcrPull
+  name: '7f951dda-4ed3-4680-a7ca-43fe172d538d'
+}
+
+resource acrPullAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(acr.id, containerApp.id, acrPullRoleDef.id)
+  scope: acr
+  properties: {
+    roleDefinitionId: acrPullRoleDef.id
+    principalId: containerApp.identity.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+
+// // VAD: Knyter samman vår Container App med rollen och vårt Key Vault.
+// resource roleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+//   name: guid(keyVault.id, containerApp.id, kvSecretsUserRole.id)
+//   scope: keyVault
+//   properties: {
+//     roleDefinitionId: kvSecretsUserRole.id
+//     principalId: containerApp.identity.principalId // Appens identitet
+//     principalType: 'ServicePrincipal'
+//   }
+// }
 
 
