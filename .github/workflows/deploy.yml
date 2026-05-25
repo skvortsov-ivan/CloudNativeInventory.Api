@@ -4,9 +4,9 @@ on:
     branches: [ "master" ]
 
 env:
-  AZURE_CONTAINER_REGISTRY: "crcloudnative"
+  AZURE_CONTAINER_REGISTRY: "acrstudentfktbixduj35by.azurecr.io"
   CONTAINER_APP_NAME: "ca-inventory-api"
-  RESOURCE_GROUP: "rg-cloudnative-dev"
+  RESOURCE_GROUP: "rg-bicep-student2"
 
 jobs:
   build-and-deploy:
