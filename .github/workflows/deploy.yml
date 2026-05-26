@@ -3,6 +3,10 @@ on:
   push:
     branches: [ "master" ]
 
+permissions:
+  id-token: write
+  contents: read
+
 env:
   AZURE_CONTAINER_REGISTRY: "acrstudentjtoxigkxpzska"
   CONTAINER_APP_NAME: "ca-inventory-api"
