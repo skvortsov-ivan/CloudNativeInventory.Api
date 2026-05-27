@@ -1,8 +1,9 @@
 using Azure.Identity; // TODO (Del 4): Krävs för Key Vault
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 using CloudNativeInventory.Api.Data;
 using CloudNativeInventory.Api.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Azure.Monitor.OpenTelemetry.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,12 +26,12 @@ builder.Services.AddCors(options =>
 var keyVaultUrl = builder.Configuration["KeyVaultUrl"];
 
 // 2. Om KeyVaultUrl är satt, koppla in Azure Key Vault som config provider
-//if (!string.IsNullOrEmpty(keyVaultUrl))
-//{
-//    builder.Configuration.AddAzureKeyVault(
-//        new Uri(keyVaultUrl),
-//        new DefaultAzureCredential());
-//}
+if (!string.IsNullOrEmpty(keyVaultUrl))
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri(keyVaultUrl),
+        new DefaultAzureCredential());
+}
 
 // TODO (Del 4 i "Tips och förslag"): Konfigurera Azure Key Vault
 // Använd Managed Identity för att hämta hemligheter i produktion.
@@ -80,3 +81,29 @@ app.MapGet("/debug/routes", (EndpointDataSource ds) =>
 
 app.Run();
 
+//I need to add a new controller to my project. In my previous one I have this endpoint "    [HttpGet("system/verify-integration")]
+//public IActionResult VerifyExternalIntegration()
+//{
+//    var apiKey = _configuration["ExternalServices:VendorApiKey"];
+
+//    if (string.IsNullOrEmpty(apiKey) || apiKey == "LOCAL_DEV_SECRET_12345_DO_NOT_DEPLOY")
+//    {
+//        return StatusCode(500, new { Status = "Unsecured", Message = "Körs med lokal (eller saknad) hemlighet!" });
+//    }
+
+//    return Ok(new { Status = "Secured", Message = "Hemlighet laddades framgångsrikt via säker konfiguration." });
+//}
+//". and in my appsettings.json I have this: "{
+//    "Logging": {
+//        "LogLevel": {
+//            "Default": "Information",
+//      "Microsoft.AspNetCore": "Warning"
+//        }
+//    },
+//  "AllowedHosts": "*",
+//  "KeyVaultUrl": "https://kvstudentjtoxigkxpzska.vault.azure.net/",
+//  "ExternalServices": {
+//        "VendorApiKey": ""
+//  }
+//}
+//"
